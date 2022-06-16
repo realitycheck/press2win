@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"io"
 	"log"
 	"time"
@@ -16,23 +15,11 @@ func main() {
 	linux := flag.Bool("l", false, "linux")
 	delay := flag.Duration("d", 0, "delay")
 	quiet := flag.Bool("q", false, "quiet")
-	noDelay := flag.Bool("n", false, "no delay")
 	flag.Parse()
 
 	if *quiet {
 		log.SetOutput(io.Discard)
 		log.SetFlags(0)
-	}
-
-	if *delay == 0 && !*noDelay {
-		var s string
-		var err error
-		fmt.Print("delay: ")
-		fmt.Scanf("%s", &s)
-		*delay, err = time.ParseDuration(s)
-		if err != nil && len(s) > 0 {
-			log.Print(err)
-		}
 	}
 
 	if *delay != 0 {
