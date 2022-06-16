@@ -12,7 +12,7 @@ import (
 
 func main() {
 	k := flag.Int("k", 0x5B+0xFFF, "key") // LWIN
-	t := flag.Int("t", 3600, "seconds")
+	t := flag.Duration("t", 1*time.Hour, "time")
 	linux := flag.Bool("l", false, "linux")
 	delay := flag.Duration("d", 0, "delay")
 	quiet := flag.Bool("q", false, "quiet")
@@ -40,6 +40,8 @@ func main() {
 		time.Sleep(*delay)
 	}
 
+	log.Printf("Pressing %d for %.0f seconds...\n", *k, (*t).Seconds())
+
 	kb, err := keybd_event.NewKeyBonding()
 	if err != nil {
 		log.Fatal(err)
@@ -53,9 +55,7 @@ func main() {
 
 	defer kb.Release()
 
-	log.Printf("Pressing %d for %d seconds...\n", *k, *t)
-
-	for i := 0; i < *t; i++ {
+	for i := 0; i < int((*t).Seconds()); i++ {
 		if err := kb.Press(); err != nil {
 			log.Print(err)
 		}
